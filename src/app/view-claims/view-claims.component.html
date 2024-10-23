@@ -1,0 +1,13 @@
+<div class="p-4 bg-white shadow-lg rounded-lg">
+  <h2 class="text-2xl font-semibold mb-4">View Logged Claims</h2>
+  <ul class="list-disc pl-5">
+    <li *ngFor="let claim of claims; let i = index" class="mb-2 flex justify-between">
+      <span>
+        <strong>{{ claim.title }}:</strong> {{ claim.description }}
+      </span>
+      <button (click)="deleteClaim(i)" class="px-3 py-1 text-white bg-red-500 hover:bg-red-600 rounded-lg">
+        Delete
+      </button>
+    </li>
+  </ul>
+</div>
