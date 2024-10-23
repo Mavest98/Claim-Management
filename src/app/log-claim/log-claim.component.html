@@ -1,12 +1,18 @@
-<div class="p-4 bg-white shadow-lg rounded-lg">
-  <h2 class="text-2xl font-semibold mb-4">Log a New Claim</h2>
-  <form (ngSubmit)="logClaim()">
-    <div class="mb-4">
-      <input [(ngModel)]="claimTitle" name="title" type="text" placeholder="Claim Title" class="w-full p-2 border rounded-lg" required>
+<div class="max-w-md mx-auto p-8 bg-white shadow-lg rounded-lg mt-10">
+  <h2 class="text-3xl font-semibold text-gray-800 mb-6 text-center">Log a New Claim</h2>
+  <form (ngSubmit)="logClaim()" class="space-y-6">
+    <div>
+      <label class="block text-gray-600 font-medium mb-2">Claim Title</label>
+      <input [(ngModel)]="claimTitle" name="title" type="text" placeholder="Enter the title of your claim"
+             class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
     </div>
-    <div class="mb-4">
-      <textarea [(ngModel)]="claimDescription" name="description" rows="4" placeholder="Claim Description" class="w-full p-2 border rounded-lg" required></textarea>
+    <div>
+      <label class="block text-gray-600 font-medium mb-2">Claim Description</label>
+      <textarea [(ngModel)]="claimDescription" name="description" rows="5" placeholder="Describe your claim"
+                class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" required></textarea>
     </div>
-    <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-700">Submit Claim</button>
+    <button type="submit" class="w-full py-3 bg-blue-500 text-white rounded-lg font-semibold hover:bg-blue-600 transition duration-300 ease-in-out shadow-md">
+      Submit Claim
+    </button>
   </form>
 </div>

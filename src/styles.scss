@@ -2,4 +2,18 @@
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 
-/* Custom SCSS styles here */
+/* Custom global styles */
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #f0f4f8; /* Light background for the entire app */
+}
+
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+h2 {
+  letter-spacing: -0.5px;
+  text-align: center;
+}
