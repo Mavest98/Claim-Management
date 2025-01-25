@@ -1,0 +1,35 @@
+/* Gradient Text for Header */
+.text-gradient {
+    background: linear-gradient(45deg, #3b82f6, #10b981);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  /* Animated Camera Icon */
+  .spin-animation {
+    animation: spin 1s linear infinite;
+  }
+  
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  
+  /* Button Hover Effects */
+  button:hover {
+    transform: scale(1.05);
+    transition: transform 0.2s ease-in-out;
+  }
+  
+  /* Modal Success and Failure Borders */
+  .border-green-500 {
+    border-color: #10b981 !important;
+  }
+  .border-red-500 {
+    border-color: #ef4444 !important;
+  }
+  

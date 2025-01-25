@@ -1,0 +1,43 @@
+/* Gradient Text */
+.text-gradient {
+    background: linear-gradient(to right, #3b82f6, #10b981);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  /* Button Styles */
+  button {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Camera Spin Animation */
+  .spin-animation {
+    animation: spin 1s linear infinite;
+  }
+  
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  
+  /* Shadow for Containers */
+  .shadow-2xl {
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+  }
+  
+  /* Input and Textarea Focus Effects */
+  input:focus,
+  textarea:focus {
+    border-color: transparent;
+    box-shadow: 0 0 10px rgba(59, 130, 246, 0.2);
+  }
+  

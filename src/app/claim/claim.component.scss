@@ -1,0 +1,76 @@
+/* Gradient Text for Headers */
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css");
+
+.text-gradient {
+    background: linear-gradient(45deg, #1287aa, #1287aa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  /* FAQ Card Hover Effect */
+  .faq-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 10px;
+  }
+  .faq-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Action Button Gradient */
+  .btn-gradient-primary {
+    background: linear-gradient(45deg, #2fabb4, #2fabb4);
+    color: white;
+    font-weight: bold;
+    border: none;
+  }
+  .btn-gradient-primary:hover {
+    background: linear-gradient(45deg, #1287aa, #1287aa);
+    transform: scale(1.05);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+  }
+  
+  .btn-gradient-success {
+    background: linear-gradient(45deg, #1b8bb8, #38f9d7);
+    color: white;
+    font-weight: bold;
+    border: none;
+  }
+  .btn-gradient-success:hover {
+    background: linear-gradient(45deg, #38f9d7, #23a2ac);
+    transform: scale(1.05);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* FAQ Icon Styling */
+  .faq-icon {
+    font-size: 2.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 60px;
+    height: 60px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    margin: 0 auto;
+    transition: transform 0.3s ease;
+  }
+  .faq-icon:hover {
+    transform: scale(1.1);
+  }
+  
+  /* Smooth Animation for FAQ Cards */
+  .faq-card h6,
+  .faq-card small {
+    transition: color 0.3s ease;
+  }
+  .faq-card:hover h6 {
+    color: white;
+  }
+  .faq-card:hover small {
+    color: rgba(255, 255, 255, 0.8);
+  }
+  h1{
+    font-size: 45px;
+  }
+  

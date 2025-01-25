@@ -1,14 +1,35 @@
-<div class="max-w-xl mx-auto p-8 bg-white shadow-lg rounded-lg mt-10">
-  <h2 class="text-3xl font-semibold text-gray-800 mb-6 text-center">View Logged Claims</h2>
-  <ul class="space-y-4">
-    <li *ngFor="let claim of claims; let i = index" class="p-4 bg-gray-100 rounded-lg shadow-sm flex justify-between items-center">
+<div class="max-w-xl mx-auto p-8 bg-gradient-to-br from-gray-50 via-white to-gray-100 shadow-2xl rounded-xl mt-10">
+  <h2 class="text-4xl font-bold text-gradient mb-6 text-center">
+    <i class="bi bi-clipboard2-check-fill text-blue-500 me-2"></i> View Logged Claims
+  </h2>
+  <ul class="space-y-6">
+    <li
+      *ngFor="let claim of claims; let i = index"
+      class="p-5 bg-white rounded-lg shadow-md flex justify-between items-center hover:scale-105 hover:shadow-lg transform transition-all duration-300 ease-in-out"
+    >
       <div>
-        <strong class="text-lg text-gray-700">{{ claim.title }}:</strong>
+        <h4 class="text-xl font-bold text-gray-800 flex items-center mb-2">
+          <i class="bi bi-file-earmark-text-fill text-blue-500 me-2"></i> {{ claim.title }}
+        </h4>
         <p class="text-gray-600">{{ claim.description }}</p>
+        <p class="text-yellow-500 font-medium mt-2">
+          <i class="bi bi-hourglass-split me-2"></i>Pending
+        </p>
       </div>
-      <button (click)="deleteClaim(i)" class="ml-4 px-4 py-2 text-white bg-red-500 hover:bg-red-600 rounded-lg transition duration-300 ease-in-out shadow-md">
-        Delete
-      </button>
+      <div class="flex space-x-2">
+        <button
+          (click)="editClaim(i)"
+          class="px-4 py-2 bg-gradient-to-r from-green-500 to-green-600 text-white font-semibold rounded-lg shadow-md hover:scale-105 hover:shadow-xl transform transition-all duration-300 ease-in-out"
+        >
+          <i class="bi bi-pencil-fill me-2"></i>Edit
+        </button>
+        <button
+          (click)="cancelEdit(i)"
+          class="px-4 py-2 bg-gradient-to-r from-gray-400 to-gray-500 text-white font-semibold rounded-lg shadow-md hover:scale-105 hover:shadow-xl transform transition-all duration-300 ease-in-out"
+        >
+          <i class="bi bi-x-circle-fill me-2"></i>Cancel
+        </button>
+      </div>
     </li>
   </ul>
 </div>

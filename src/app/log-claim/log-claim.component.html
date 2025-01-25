@@ -1,18 +1,60 @@
-<div class="max-w-md mx-auto p-8 bg-white shadow-lg rounded-lg mt-10">
-  <h2 class="text-3xl font-semibold text-gray-800 mb-6 text-center">Log a New Claim</h2>
-  <form (ngSubmit)="logClaim()" class="space-y-6">
-    <div>
-      <label class="block text-gray-600 font-medium mb-2">Claim Title</label>
-      <input [(ngModel)]="claimTitle" name="title" type="text" placeholder="Enter the title of your claim"
-             class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
-    </div>
-    <div>
-      <label class="block text-gray-600 font-medium mb-2">Claim Description</label>
-      <textarea [(ngModel)]="claimDescription" name="description" rows="5" placeholder="Describe your claim"
-                class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" required></textarea>
-    </div>
-    <button type="submit" class="w-full py-3 bg-blue-500 text-white rounded-lg font-semibold hover:bg-blue-600 transition duration-300 ease-in-out shadow-md">
-      Submit Claim
+<div class="max-w-xl mx-auto p-8 bg-gradient-to-br from-gray-50 via-white to-gray-100 shadow-2xl rounded-xl mt-12">
+  <!-- Authentication Section -->
+  <div *ngIf="!isAuthenticated" class="text-center">
+    <h4 class="text-4xl font-bold text-gradient mb-5">
+      <i class="bi bi-shield-lock-fill text-blue-600 me-2"></i> Biometric Authentication
+    </h4>
+    <p class="text-gray-600 mb-6">Scan your face for secure authentication.</p>
+    <button
+      class="py-3 px-6 bg-gradient-to-r from-blue-500 to-blue-700 text-white font-semibold rounded-lg shadow-lg hover:scale-105 hover:shadow-xl transform transition-all duration-300 ease-in-out"
+      (click)="authenticateUser()"
+    >
+      <i
+        class="bi bi-camera-fill mr-2"
+        [ngClass]="{ 'spin-animation': scanning }"
+      ></i>
+      <span *ngIf="scanning">Scanning...</span>
+      <span *ngIf="!scanning">Start Authentication</span>
     </button>
-  </form>
+  </div>
+
+  <!-- Claim Form Section -->
+  <div *ngIf="isAuthenticated" class="mt-6">
+    <h4 class="text-4xl font-bold text-gradient mb-6 text-center">
+      <i class="bi bi-pencil-square-fill text-green-600 me-2"></i> Log a New Claim
+    </h4>
+    <form (ngSubmit)="submitClaim()" class="space-y-6">
+      <div>
+        <label class="block text-gray-700 font-medium mb-2">Policy Number</label>
+        <input
+          [(ngModel)]="policyNumber"
+          name="policyNumber"
+          type="text"
+          placeholder="Enter your policy number"
+          class="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-300 transition-all"
+          required
+        />
+      </div>
+      <div>
+        <label class="block text-gray-700 font-medium mb-2">Claim Description</label>
+        <textarea
+          [(ngModel)]="claimDescription"
+          name="claimDescription"
+          rows="5"
+          placeholder="Describe your claim"
+          class="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-4 focus:ring-green-300 transition-all"
+          required
+        ></textarea>
+      </div>
+      <button
+        type="submit"
+        class="w-full py-3 bg-gradient-to-r from-green-500 to-green-700 text-white font-semibold rounded-lg shadow-lg hover:scale-105 hover:shadow-xl transform transition-all duration-300 ease-in-out"
+      >
+        <i class="bi bi-send-fill me-2"></i>Submit Claim
+      </button>
+    </form>
+    <div *ngIf="successMessage" class="mt-5 text-green-600 text-center">
+      <i class="bi bi-check-circle-fill me-2"></i>{{ successMessage }}
+    </div>
+  </div>
 </div>

@@ -1,0 +1,30 @@
+/* Gradient Text for Header */
+.text-gradient {
+    background: linear-gradient(90deg, #3b82f6, #10b981);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  /* List Item Hover Animation */
+  li {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  li:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Button Hover Effects */
+  button {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Shadow for Containers */
+  .shadow-2xl {
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+  }
+  

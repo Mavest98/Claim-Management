@@ -34,6 +34,10 @@ export class ClaimsService {
       this.claims = JSON.parse(storedClaims);
     }
   }
+  updateClaim(index: number, updatedClaim: { title: string; description: string }) {
+    this.claims[index] = updatedClaim;
+    this.saveClaimsToLocalStorage();
+  }
 
   // Save claims to local storage
   private saveClaimsToLocalStorage() {

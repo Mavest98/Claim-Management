@@ -1,0 +1,76 @@
+<div class="max-w-lg mx-auto p-8 bg-gradient-to-br from-gray-50 via-white to-gray-100 shadow-xl rounded-lg mt-10">
+    <!-- Page Header -->
+    <h2 class="text-4xl font-extrabold text-gray-800 text-center mb-5">
+      <i class="bi bi-person-circle me-2 text-blue-500"></i> Face Recognition Login
+    </h2>
+    <p class="text-gray-600 text-center mb-8">
+      Please scan your face for authentication to continue.
+    </p>
+  
+    <!-- Face Recognition Scanner -->
+    <div class="text-center">
+      <button
+        class="py-3 px-6 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold rounded-lg shadow-lg hover:scale-105 transform transition-all duration-300 ease-in-out"
+        [disabled]="scanning"
+        (click)="handleScan()"
+      >
+        <i
+          class="bi bi-camera-fill mr-2"
+          [ngClass]="{ 'spin-animation': scanning }"
+        ></i>
+        <span *ngIf="scanning">Scanning...</span>
+        <span *ngIf="!scanning">Start Scan</span>
+      </button>
+    </div>
+  
+    <!-- Error Message -->
+    <div *ngIf="errorMessage" class="mt-5 text-center text-red-600 font-semibold">
+      <i class="bi bi-exclamation-triangle-fill mr-2"></i>{{ errorMessage }}
+    </div>
+  
+    <!-- Success Modal -->
+    <div
+      class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
+      *ngIf="showModal"
+    >
+      <div
+        class="bg-white rounded-lg shadow-xl p-6 w-96"
+        [ngClass]="{
+          'border-green-500': isVerified,
+          'border-red-500': !isVerified
+        }"
+        style="border-width: 4px;"
+      >
+        <div class="flex items-center">
+          <i
+            class="text-3xl mr-4"
+            [ngClass]="{
+              'bi bi-check-circle-fill text-green-500': isVerified,
+              'bi bi-x-circle-fill text-red-500': !isVerified
+            }"
+          ></i>
+          <h3 class="text-xl font-bold">
+            {{ isVerified ? 'Authentication Successful' : 'Authentication Failed' }}
+          </h3>
+        </div>
+        <p class="mt-4 text-gray-700">
+          {{ isVerified
+            ? 'You have been successfully authenticated. Redirecting to the claims page...'
+            : 'Your authentication failed. Please try again.' }}
+        </p>
+        <div class="mt-6 text-center">
+          <button
+            class="py-2 px-4 rounded-lg text-white font-semibold shadow-lg"
+            [ngClass]="{
+              'bg-green-500 hover:bg-green-600': isVerified,
+              'bg-red-500 hover:bg-red-600': !isVerified
+            }"
+            (click)="closeModal()"
+          >
+            {{ isVerified ? 'Proceed' : 'Close' }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
