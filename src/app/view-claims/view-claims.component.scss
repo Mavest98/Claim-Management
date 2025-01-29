@@ -28,3 +28,53 @@
     box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
   }
   
+
+
+
+
+/* Gradient Text for Header */
+.text-gradient {
+  background: linear-gradient(45deg, #0e79b2, #49b6ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Claim List Item Hover Effects */
+li {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+li:hover {
+  transform: scale(1.05);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Button Hover Effects */
+button {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Status Badges */
+.bg-yellow-200 {
+  background-color: #fefcbf;
+}
+.text-yellow-800 {
+  color: #b7791f;
+}
+.bg-green-200 {
+  background-color: #c6f6d5;
+}
+.text-green-800 {
+  color: #2f855a;
+}
+
+/* Icons for Status */
+.bi-hourglass-split {
+  color: #b7791f;
+}
+.bi-check-circle-fill {
+  color: #2f855a;
+}

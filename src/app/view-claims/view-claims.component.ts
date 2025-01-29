@@ -7,21 +7,26 @@ import { ClaimsService } from '../claims.service';
   styleUrls: ['./view-claims.component.scss']
 })
 export class ViewClaimsComponent implements OnInit {
-  claims: { title: string; description: string; isEditing?: boolean }[] = [];
+  claims: { title: string; description: string; status: string; isEditing?: boolean; isExpanded?: boolean }[] = [];
 
   constructor(private claimsService: ClaimsService) {}
 
   ngOnInit() {
-    this.claims = this.claimsService.getClaims();
+    this.claims = this.claimsService.getClaims().map(claim => ({
+      ...claim,
+      status: 'Pending' // Default status set to Pending
+    }));
+  }
+
+  toggleDescription(index: number): void {
+    this.claims[index].isExpanded = !this.claims[index].isExpanded;
   }
 
   editClaim(index: number): void {
-    // Set the selected claim to editing mode
     this.claims[index].isEditing = true;
   }
 
   saveClaim(index: number, updatedTitle: string, updatedDescription: string): void {
-    // Save the updated claim and exit editing mode
     this.claims[index].title = updatedTitle;
     this.claims[index].description = updatedDescription;
     this.claims[index].isEditing = false;
@@ -32,7 +37,6 @@ export class ViewClaimsComponent implements OnInit {
   }
 
   cancelEdit(index: number): void {
-    // Exit editing mode without saving
     this.claims[index].isEditing = false;
   }
 }
