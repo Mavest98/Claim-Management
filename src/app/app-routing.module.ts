@@ -6,10 +6,10 @@ import { LoginComponent } from './login/login.component';
 import { ClaimComponent } from './claim/claim.component';
 
 const routes: Routes = [
-  { path: 'log-claim', component: LogClaimComponent },
-  { path: 'view-claims', component: ViewClaimsComponent },
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
+  { path: 'log-claim', component: LogClaimComponent },
+  { path: 'view-claims', component: ViewClaimsComponent },
   { path: 'claim', component: ClaimComponent }
 ];
 
