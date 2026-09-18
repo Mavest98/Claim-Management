@@ -1,5 +1,18 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { ClaimsService } from '../claims.service';
+
+interface DashboardClaim {
+  id: string;
+  policyNumber: string;
+  incidentType: string;
+  claimAmount: number;
+  resolution: string;
+  claimDescription: string;
+  dateSubmitted: string;
+  status: string;
+  verifiedUser: string;
+}
 
 @Component({
   selector: 'app-claim',
@@ -7,9 +20,25 @@ import { Router } from '@angular/router';
   styleUrls: ['./claim.component.scss']
 })
 export class ClaimComponent {
-  constructor(private router: Router) {}
+  constructor(private router: Router, private claimsService: ClaimsService) {
+    this.loadClaims();
+  }
 
+  currentView: 'overview' | 'verify' | 'form' | 'claims' = 'overview';
+  isScanning = false;
   selectedFaq: string | null = null;
+  verifiedUser = {
+    fullName: 'Alex Mercer',
+    idNumber: 'ID-9082-331X'
+  };
+  claimInput = {
+    policyNumber: '',
+    incidentType: 'Vehicle',
+    claimAmount: null as number | null,
+    resolution: 'Reimbursement',
+    claimDescription: ''
+  };
+  submittedClaims: DashboardClaim[] = [];
 
   faqs = [
     {
@@ -60,6 +89,53 @@ export class ClaimComponent {
 
   onLogClaims(): void {
     this.router.navigate(['/log-claim']);
+  }
+
+  verifyIdentity(): void {
+    this.isScanning = true;
+    setTimeout(() => {
+      this.isScanning = false;
+      this.currentView = 'form';
+    }, 1200);
+  }
+
+  submitClaim(): void {
+    if (!this.claimInput.policyNumber || !this.claimInput.claimAmount || !this.claimInput.claimDescription) {
+      return;
+    }
+
+    const claim: DashboardClaim = {
+      id: `CLM-${Math.floor(100000 + Math.random() * 900000)}`,
+      policyNumber: this.claimInput.policyNumber,
+      incidentType: this.claimInput.incidentType,
+      claimAmount: Number(this.claimInput.claimAmount),
+      resolution: this.claimInput.resolution,
+      claimDescription: this.claimInput.claimDescription,
+      dateSubmitted: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+      status: 'Under Review',
+      verifiedUser: this.verifiedUser.fullName
+    };
+
+    this.claimsService.addClaim({
+      title: `${claim.incidentType} claim - ${claim.policyNumber}`,
+      description: `${claim.claimDescription} Claim amount: $${claim.claimAmount}. Preferred resolution: ${claim.resolution}.`
+    });
+    this.submittedClaims.unshift(claim);
+    this.currentView = 'claims';
+  }
+
+  private loadClaims(): void {
+    this.submittedClaims = this.claimsService.getClaims().map((claim, index) => ({
+      id: `CLM-${String(index + 1).padStart(6, '0')}`,
+      policyNumber: claim.title,
+      incidentType: 'Claim',
+      claimAmount: 0,
+      resolution: 'Review required',
+      claimDescription: claim.description,
+      dateSubmitted: 'Previously submitted',
+      status: index % 2 === 0 ? 'Under Review' : 'Approved',
+      verifiedUser: this.verifiedUser.fullName
+    }));
   }
 
   toggleFaq(index: number): void {

@@ -14,16 +14,16 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have as title 'claims-management-app'`, () => {
+  it(`should have as title 'claims-app'`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.title).toEqual('claims-management-app');
+    expect(app.title).toEqual('claims-app');
   });
 
-  it('should render title', () => {
+  it('should render the application shell', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('.content span')?.textContent).toContain('claims-management-app app is running!');
+    expect(compiled.querySelector('.brand-copy h1')?.textContent).toContain('Eazy Claims');
   });
 });

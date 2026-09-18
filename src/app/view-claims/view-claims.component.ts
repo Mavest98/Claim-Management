@@ -12,9 +12,21 @@ export class ViewClaimsComponent implements OnInit {
   constructor(private claimsService: ClaimsService) {}
 
   ngOnInit() {
-    this.claims = this.claimsService.getClaims().map(claim => ({
+    this.refreshClaims();
+  }
+
+  get approvedClaimsCount(): number {
+    return this.claims.filter((claim) => claim.status === 'Approved').length;
+  }
+
+  get pendingClaimsCount(): number {
+    return this.claims.filter((claim) => claim.status === 'Pending').length;
+  }
+
+  refreshClaims(): void {
+    this.claims = this.claimsService.getClaims().map((claim, index) => ({
       ...claim,
-      status: 'Pending' // Default status set to Pending
+      status: index % 2 === 0 ? 'Pending' : 'Approved'
     }));
   }
 
@@ -38,5 +50,10 @@ export class ViewClaimsComponent implements OnInit {
 
   cancelEdit(index: number): void {
     this.claims[index].isEditing = false;
+  }
+
+  deleteClaim(index: number): void {
+    this.claimsService.deleteClaim(index);
+    this.refreshClaims();
   }
 }

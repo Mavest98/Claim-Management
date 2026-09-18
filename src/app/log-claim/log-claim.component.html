@@ -1,60 +1,170 @@
-<div class="max-w-xl mx-auto p-8 bg-gradient-to-br from-gray-50 via-white to-gray-100 shadow-2xl rounded-xl mt-12">
-  <!-- Authentication Section -->
-  <div *ngIf="!isAuthenticated" class="text-center">
-    <h4 class="text-4xl font-bold text-gradient mb-5">
-      <i class="bi bi-shield-lock-fill text-blue-600 me-2"></i> Biometric Authentication
-    </h4>
-    <p class="text-gray-600 mb-6">Scan your face for secure authentication.</p>
-    <button
-      class="py-3 px-6 bg-gradient-to-r from-blue-500 to-blue-700 text-white font-semibold rounded-lg shadow-lg hover:scale-105 hover:shadow-xl transform transition-all duration-300 ease-in-out"
-      (click)="authenticateUser()"
-    >
-      <i
-        class="bi bi-camera-fill mr-2"
-        [ngClass]="{ 'spin-animation': scanning }"
-      ></i>
-      <span *ngIf="scanning">Scanning...</span>
-      <span *ngIf="!scanning">Start Authentication</span>
-    </button>
-  </div>
+<div class="min-h-screen bg-slate-950 text-slate-100 font-sans p-4 sm:p-8 relative overflow-hidden">
+  
+  <!-- Ambient Glow Background Effects -->
+  <div class="absolute -top-32 -left-32 w-96 h-96 bg-indigo-600/30 rounded-full blur-[128px] pointer-events-none"></div>
+  <div class="absolute -bottom-32 -right-32 w-96 h-96 bg-cyan-500/20 rounded-full blur-[128px] pointer-events-none"></div>
 
-  <!-- Claim Form Section -->
-  <div *ngIf="isAuthenticated" class="mt-6">
-    <h4 class="text-4xl font-bold text-gradient mb-6 text-center">
-      <i class="bi bi-pencil-square-fill text-green-600 me-2"></i> Log a New Claim
-    </h4>
-    <form (ngSubmit)="submitClaim()" class="space-y-6">
-      <div>
-        <label class="block text-gray-700 font-medium mb-2">Policy Number</label>
-        <input
-          [(ngModel)]="policyNumber"
-          name="policyNumber"
-          type="text"
-          placeholder="Enter your policy number"
-          class="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-300 transition-all"
-          required
-        />
+  <div class="max-w-6xl mx-auto relative z-10">
+    
+<div class="min-h-screen bg-slate-950 text-slate-100 font-sans p-4 sm:p-8 relative">
+  
+  <!-- Navigation Header -->
+  <header class="max-w-5xl mx-auto flex items-center justify-between py-4 mb-8 border-b border-slate-800">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-500 to-cyan-400 flex items-center justify-center font-extrabold text-white text-xl shadow-lg shadow-indigo-500/20">
+        E
       </div>
       <div>
-        <label class="block text-gray-700 font-medium mb-2">Claim Description</label>
-        <textarea
-          [(ngModel)]="claimDescription"
-          name="claimDescription"
-          rows="5"
-          placeholder="Describe your claim"
-          class="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-4 focus:ring-green-300 transition-all"
-          required
-        ></textarea>
+        <span class="text-xs font-bold uppercase tracking-wider text-cyan-400">Insurance Platform</span>
+        <h1 class="text-lg font-bold text-white leading-tight">Eazy Claims</h1>
       </div>
-      <button
-        type="submit"
-        class="w-full py-3 bg-gradient-to-r from-green-500 to-green-700 text-white font-semibold rounded-lg shadow-lg hover:scale-105 hover:shadow-xl transform transition-all duration-300 ease-in-out"
-      >
-        <i class="bi bi-send-fill me-2"></i>Submit Claim
-      </button>
-    </form>
-    <div *ngIf="successMessage" class="mt-5 text-green-600 text-center">
-      <i class="bi bi-check-circle-fill me-2"></i>{{ successMessage }}
     </div>
-  </div>
+
+    <!-- Live Step Indicators -->
+    <div class="flex items-center gap-2 text-xs font-bold">
+      <span [class]="currentStep === 'verify' ? 'text-indigo-400' : 'text-slate-500'">1. Verify</span>
+      <span class="text-slate-600">></span>
+      <span [class]="currentStep === 'form' ? 'text-indigo-400' : 'text-slate-500'">2. Log Claim</span>
+      <span class="text-slate-600">></span>
+      <span [class]="currentStep === 'claims' ? 'text-indigo-400' : 'text-slate-500'">3. Claims List</span>
+    </div>
+  </header>
+
+  <main class="max-w-5xl mx-auto">
+
+    <!-- STEP 1: IDENTITY VERIFICATION GATE -->
+    <div *ngIf="currentStep === 'verify'" class="max-w-md mx-auto my-12 bg-slate-900/80 border border-slate-800 backdrop-blur-xl rounded-3xl p-8 text-center shadow-2xl">
+      <div class="w-20 h-20 mx-auto mb-6 rounded-2xl bg-indigo-500/10 border border-indigo-500/30 flex items-center justify-center text-3xl text-indigo-400 relative">
+        <i class="fa-solid" [ngClass]="isScanning ? 'fa-spinner animate-spin text-cyan-400' : 'fa-fingerprint'"></i>
+      </div>
+
+      <h2 class="text-2xl font-extrabold text-white mb-2">Identity Verification</h2>
+      <p class="text-sm text-slate-400 mb-6">Verify your identity before accessing your policy coverage and logging a claim.</p>
+
+      <div class="p-4 rounded-xl bg-slate-950/60 border border-slate-800 mb-6 text-left space-y-2 text-xs">
+        <div class="flex justify-between"><span class="text-slate-500">Holder Name:</span> <strong class="text-slate-200">{{ verifiedUser.fullName }}</strong></div>
+        <div class="flex justify-between"><span class="text-slate-500">Government ID:</span> <strong class="text-slate-200">{{ verifiedUser.idNumber }}</strong></div>
+      </div>
+
+      <button (click)="verifyIdentity()" [disabled]="isScanning" class="w-full py-4 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-sm shadow-lg shadow-indigo-600/30 transition-all flex items-center justify-center gap-2">
+        <i class="fa-solid fa-shield-halved"></i>
+        <span>{{ isScanning ? 'Verifying Identity...' : 'Authenticate & Continue' }}</span>
+      </button>
+    </div>
+
+    <!-- STEP 2: CLAIM LOGGING FORM -->
+    <div *ngIf="currentStep === 'form'" class="bg-slate-900/60 border border-slate-800 backdrop-blur-xl rounded-3xl p-6 sm:p-8 shadow-2xl">
+      <div class="flex justify-between items-center mb-6 pb-4 border-b border-slate-800">
+        <div>
+          <h2 class="text-2xl font-extrabold text-white">Log Incident Details</h2>
+          <p class="text-xs text-slate-400 mt-1">Fill out the claim request for automated screening.</p>
+        </div>
+        <span class="px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-bold flex items-center gap-2">
+          <i class="fa-solid fa-circle-check"></i> Verified: {{ verifiedUser.fullName }}
+        </span>
+      </div>
+
+      <form (ngSubmit)="submitClaim()" class="space-y-6">
+        <div class="grid sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-bold text-slate-300 mb-1">Policy Number *</label>
+            <input [(ngModel)]="claimInput.policyNumber" name="policyNumber" type="text" placeholder="e.g. POL-883921" required class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-indigo-500">
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-slate-300 mb-1">Incident Type</label>
+            <select [(ngModel)]="claimInput.incidentType" name="incidentType" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-indigo-500">
+              <option value="Vehicle">Vehicle Damage</option>
+              <option value="Medical">Medical Emergency</option>
+              <option value="Property">Property / Home</option>
+              <option value="Travel">Travel Interruption</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-bold text-slate-300 mb-1">Estimated Amount ($ USD) *</label>
+            <input [(ngModel)]="claimInput.claimAmount" name="claimAmount" type="number" placeholder="2500" required class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-indigo-500">
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-slate-300 mb-1">Preferred Outcome</label>
+            <select [(ngModel)]="claimInput.resolution" name="resolution" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-indigo-500">
+              <option value="Reimbursement">Direct Reimbursement</option>
+              <option value="Repair">Authorized Repair Service</option>
+              <option value="Replacement">Item Replacement</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-300 mb-1">Incident Description *</label>
+          <textarea [(ngModel)]="claimInput.claimDescription" name="claimDescription" rows="4" placeholder="Describe the timeline, location, and damage details..." required class="w-full bg-slate-950 border border-slate-700 rounded-xl p-4 text-sm text-white focus:outline-none focus:border-indigo-500"></textarea>
+        </div>
+
+        <button type="submit" class="w-full py-4 rounded-xl bg-gradient-to-r from-indigo-500 to-cyan-500 hover:opacity-95 text-white font-extrabold text-sm shadow-xl shadow-indigo-500/20 transition-all flex items-center justify-center gap-2">
+          <span>Submit Claim to Dashboard</span>
+          <i class="fa-solid fa-arrow-right"></i>
+        </button>
+      </form>
+    </div>
+
+    <!-- STEP 3: SUBMITTED CLAIMS PAGE (CORRESPONDING DETAILS) -->
+    <div *ngIf="currentStep === 'claims'" class="space-y-6">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h2 class="text-2xl font-extrabold text-white">Claims Dashboard</h2>
+          <p class="text-xs text-slate-400 mt-1">All claims logged under verified user {{ verifiedUser.fullName }}.</p>
+        </div>
+        <button (click)="startNewClaim()" class="px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs flex items-center gap-2">
+          <i class="fa-solid fa-plus"></i> Log Another Claim
+        </button>
+      </div>
+
+      <!-- Live Claims List -->
+      <div *ngFor="let claim of submittedClaims" class="bg-slate-900/80 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-slate-800">
+          <div class="flex items-center gap-3">
+            <span class="px-3 py-1 rounded-lg bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 font-extrabold text-xs">
+              {{ claim.id }}
+            </span>
+            <span class="text-xs text-slate-400">Policy: <strong class="text-slate-200">{{ claim.policyNumber }}</strong></span>
+          </div>
+          <span class="px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 font-bold text-xs flex items-center gap-1.5">
+            <i class="fa-solid fa-clock-rotate-left"></i> {{ claim.status }}
+          </span>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 py-2 text-xs">
+          <div>
+            <span class="text-slate-500 block">Incident Type</span>
+            <strong class="text-slate-200 text-sm">{{ claim.incidentType }}</strong>
+          </div>
+          <div>
+            <span class="text-slate-500 block">Amount Requested</span>
+            <strong class="text-emerald-400 text-sm">${{ claim.claimAmount | number }} USD</strong>
+          </div>
+          <div>
+            <span class="text-slate-500 block">Requested Outcome</span>
+            <strong class="text-slate-200 text-sm">{{ claim.resolution }}</strong>
+          </div>
+          <div>
+            <span class="text-slate-500 block">Verified By</span>
+            <strong class="text-indigo-300 text-sm">{{ claim.verifiedUser }}</strong>
+          </div>
+        </div>
+
+        <div class="p-3 rounded-xl bg-slate-950/60 border border-slate-800/80 text-xs">
+          <span class="text-slate-500 font-bold block mb-1">Description Provided:</span>
+          <p class="text-slate-300 leading-relaxed">{{ claim.claimDescription }}</p>
+        </div>
+
+        <div class="text-right text-[11px] text-slate-500">
+          Submitted on {{ claim.dateSubmitted }}
+        </div>
+      </div>
+    </div>
+
+  </main>
 </div>

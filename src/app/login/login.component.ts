@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { ClaimService } from '../claims.service';
 
 @Component({
   selector: 'app-login',
@@ -12,7 +13,7 @@ export class LoginComponent {
   isVerified: boolean = false;
   errorMessage: string = ''; // Holds the error message
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private claimService: ClaimService) {}
 
   handleScan(): void {
     this.scanning = true;
@@ -28,7 +29,7 @@ export class LoginComponent {
 
   closeModal(): void {
     if (this.isVerified) {
-      // Authentication successful, navigate to the claims page
+      this.claimService.authenticateUser();
       this.router.navigate(['/claim']);
     } else {
       // Authentication failed, show error message

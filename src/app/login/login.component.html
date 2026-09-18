@@ -1,76 +1,61 @@
-<div class="max-w-lg mx-auto p-8 bg-gradient-to-br from-gray-50 via-white to-gray-100 shadow-xl rounded-lg mt-10">
-    <!-- Page Header -->
-    <h2 class="text-4xl font-extrabold text-gray-800 text-center mb-5">
-      <i class="bi bi-person-circle me-2 text-blue-500"></i> Face Recognition Login
-    </h2>
-    <p class="text-gray-600 text-center mb-8">
-      Please scan your face for authentication to continue.
-    </p>
-  
-    <!-- Face Recognition Scanner -->
-    <div class="text-center">
-      <button
-        class="py-3 px-6 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold rounded-lg shadow-lg hover:scale-105 transform transition-all duration-300 ease-in-out"
-        [disabled]="scanning"
-        (click)="handleScan()"
-      >
-        <i
-          class="bi bi-camera-fill mr-2"
-          [ngClass]="{ 'spin-animation': scanning }"
-        ></i>
-        <span *ngIf="scanning">Scanning...</span>
-        <span *ngIf="!scanning">Start Scan</span>
-      </button>
-    </div>
-  
-    <!-- Error Message -->
-    <div *ngIf="errorMessage" class="mt-5 text-center text-red-600 font-semibold">
-      <i class="bi bi-exclamation-triangle-fill mr-2"></i>{{ errorMessage }}
-    </div>
-  
-    <!-- Success Modal -->
-    <div
-      class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
-      *ngIf="showModal"
-    >
-      <div
-        class="bg-white rounded-lg shadow-xl p-6 w-96"
-        [ngClass]="{
-          'border-green-500': isVerified,
-          'border-red-500': !isVerified
-        }"
-        style="border-width: 4px;"
-      >
-        <div class="flex items-center">
-          <i
-            class="text-3xl mr-4"
-            [ngClass]="{
-              'bi bi-check-circle-fill text-green-500': isVerified,
-              'bi bi-x-circle-fill text-red-500': !isVerified
-            }"
-          ></i>
-          <h3 class="text-xl font-bold">
-            {{ isVerified ? 'Authentication Successful' : 'Authentication Failed' }}
-          </h3>
-        </div>
-        <p class="mt-4 text-gray-700">
-          {{ isVerified
-            ? 'You have been successfully authenticated. Redirecting to the claims page...'
-            : 'Your authentication failed. Please try again.' }}
-        </p>
-        <div class="mt-6 text-center">
-          <button
-            class="py-2 px-4 rounded-lg text-white font-semibold shadow-lg"
-            [ngClass]="{
-              'bg-green-500 hover:bg-green-600': isVerified,
-              'bg-red-500 hover:bg-red-600': !isVerified
-            }"
-            (click)="closeModal()"
-          >
-            {{ isVerified ? 'Proceed' : 'Close' }}
-          </button>
-        </div>
+<section class="security-login-panel">
+  <div class="security-intro">
+    <span class="status-pill"><span class="pulse-dot"></span> Secure access online</span>
+    <h2><i class="bi bi-shield-lock-fill"></i> Welcome back.</h2>
+    <p>Verify your identity to access your claims workspace, review policy activity, and submit a new claim securely.</p>
+
+    <div class="trust-grid">
+      <div>
+        <strong>24/7</strong>
+        <span>Secure monitoring</span>
+      </div>
+      <div>
+        <strong>256-bit</strong>
+        <span>Data protection</span>
+      </div>
+      <div>
+        <strong>Fast</strong>
+        <span>Claims access</span>
       </div>
     </div>
   </div>
-  
+
+  <div class="scanner-card">
+    <div class="scanner-frame" [class.active]="scanning">
+      <div class="scanner-ring"></div>
+      <div class="scanner-core">
+        <i class="bi" [ngClass]="scanning ? 'bi-arrow-repeat spin-animation' : 'bi-fingerprint'"></i>
+      </div>
+    </div>
+
+    <span class="eyebrow">Identity checkpoint</span>
+    <h3>{{ scanning ? 'Verifying your identity' : 'Ready when you are' }}</h3>
+    <p class="scanner-copy">{{ scanning ? 'Keep this window open while we complete the secure check.' : 'Use biometric verification to continue to your claims workspace.' }}</p>
+
+    <button class="primary-btn" [disabled]="scanning" (click)="handleScan()">
+      <i class="bi" [ngClass]="scanning ? 'bi-arrow-repeat spin-animation' : 'bi-fingerprint'"></i>
+      <span>{{ scanning ? 'Verifying identity...' : 'Verify & continue' }}</span>
+    </button>
+
+    <div class="secure-note"><i class="bi bi-lock-fill"></i> Your identity data is protected</div>
+
+    <div *ngIf="errorMessage" class="error-message" role="alert">
+      <i class="bi bi-exclamation-triangle-fill"></i>
+      {{ errorMessage }}
+    </div>
+  </div>
+</section>
+
+<div *ngIf="showModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="verification-title">
+  <div class="verification-modal" [ngClass]="{ success: isVerified, failure: !isVerified }">
+    <div class="modal-icon">
+      <i class="bi" [ngClass]="isVerified ? 'bi-check-circle-fill' : 'bi-x-circle-fill'"></i>
+    </div>
+    <h3 id="verification-title">{{ isVerified ? 'Identity verified' : 'Verification could not be completed' }}</h3>
+    <p>{{ isVerified ? 'Your secure claims workspace is ready.' : 'We could not confirm your identity this time. Please try again.' }}</p>
+    <button class="modal-btn" [class.success-btn]="isVerified" [class.failure-btn]="!isVerified" (click)="closeModal()">
+      {{ isVerified ? 'Enter workspace' : 'Try again' }}
+      <i class="bi" [ngClass]="isVerified ? 'bi-arrow-right' : 'bi-arrow-repeat'"></i>
+    </button>
+  </div>
+</div>

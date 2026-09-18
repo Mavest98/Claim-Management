@@ -2,55 +2,93 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { ClaimsService } from '../claims.service';
 
+export interface ClaimRecord {
+  id: string;
+  policyNumber: string;
+  incidentType: string;
+  claimAmount: number;
+  resolution: string;
+  claimDescription: string;
+  dateSubmitted: string;
+  status: string;
+  verifiedUser: string;
+}
+
 @Component({
   selector: 'app-log-claim',
   templateUrl: './log-claim.component.html'
 })
 export class LogClaimComponent {
-  isAuthenticated: boolean = false; // Tracks authentication status
-  policyNumber: string = ''; // Stores policy number input
-  claimDescription: string = ''; // Stores claim description input
-  successMessage: string = ''; // Message after claim submission
-  scanning: boolean = false; // Indicates whether the scanning is in progress
-
   constructor(private claimsService: ClaimsService, private router: Router) {}
 
-  // Simulate biometric authentication
-  
-  authenticateUser(): void {
+  // Step State: 'verify' | 'form' | 'claims'
+  currentStep: 'verify' | 'form' | 'claims' = 'verify';
+  isScanning = false;
+
+  // Verified User Identity
+  verifiedUser = {
+    fullName: 'Alex Mercer',
+    idNumber: 'ID-9082-331X',
+    verifiedAt: ''
+  };
+
+  // Claim Form Inputs
+  claimInput = {
+    policyNumber: '',
+    incidentType: 'Vehicle',
+    claimAmount: null as number | null,
+    resolution: 'Reimbursement',
+    claimDescription: ''
+  };
+
+  // Submitted Claims Database
+  submittedClaims: ClaimRecord[] = [];
+
+  // Step 1: Simulate Biometric / Identity Check
+  verifyIdentity() {
+    this.isScanning = true;
     setTimeout(() => {
-      alert('Biometric authentication successful!');
-      this.isAuthenticated = true; // Update authentication status
-    }, 2000); // Simulate a delay for authentication
-  
-    // Simulate a scanning process
-    setTimeout(() => {
-      this.scanning = false; // Reset scanning to false after the process
-      alert('Authentication Complete!');
-    }, 3000); // 3 seconds for demo purposes
+      this.isScanning = false;
+      this.verifiedUser.verifiedAt = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      this.currentStep = 'form';
+    }, 1200);
   }
-  // Submit the claim
-  submitClaim(): void {
-    if (this.policyNumber && this.claimDescription) {
-      const newClaim = {
-        title: this.policyNumber,
-        description: this.claimDescription,
-      };
 
-      // Add the claim using the ClaimsService
-      this.claimsService.addClaim(newClaim);
-
-      // Display success message
-      this.successMessage = 'Claim submitted successfully! Redirecting to View Claims...';
-
-      // Clear the form
-      this.policyNumber = '';
-      this.claimDescription = '';
-
-      // Redirect to the View Claims page after 2 seconds
-      setTimeout(() => {
-        this.router.navigate(['/view-claims']);
-      }, 2000);
+  // Step 2: Submit and Map Details to Claims Dashboard
+  submitClaim() {
+    if (!this.claimInput.policyNumber || !this.claimInput.claimAmount || !this.claimInput.claimDescription) {
+      return;
     }
+
+    const newClaim: ClaimRecord = {
+      id: 'CLM-' + Math.floor(100000 + Math.random() * 900000),
+      policyNumber: this.claimInput.policyNumber,
+      incidentType: this.claimInput.incidentType,
+      claimAmount: Number(this.claimInput.claimAmount),
+      resolution: this.claimInput.resolution,
+      claimDescription: this.claimInput.claimDescription,
+      dateSubmitted: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+      status: 'Under Review',
+      verifiedUser: this.verifiedUser.fullName
+    };
+
+    this.claimsService.addClaim({
+      title: `${newClaim.incidentType} claim - ${newClaim.policyNumber}`,
+      description: `${newClaim.claimDescription} Claim amount: $${newClaim.claimAmount}. Preferred resolution: ${newClaim.resolution}.`
+    });
+    this.submittedClaims.unshift(newClaim);
+    this.router.navigate(['/view-claims']);
+  }
+
+  // Allow Logging Another Claim
+  startNewClaim() {
+    this.claimInput = {
+      policyNumber: '',
+      incidentType: 'Vehicle',
+      claimAmount: null,
+      resolution: 'Reimbursement',
+      claimDescription: ''
+    };
+    this.currentStep = 'form';
   }
 }

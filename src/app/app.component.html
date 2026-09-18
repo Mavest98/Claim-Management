@@ -1,7 +1,46 @@
-<div class="container mx-auto p-8">
-  <!-- <nav class="mb-8 text-center">
-    <a routerLink="/log-claim" class="text-xl font-semibold text-blue-500 hover:text-blue-700 mr-4 transition">Log a New Claim</a>
-    <a routerLink="/view-claims" class="text-xl font-semibold text-blue-500 hover:text-blue-700 transition">View Logged Claims</a>
-  </nav> -->
-  <router-outlet></router-outlet>
+<!-- Google Font -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<!-- Tailwind CSS (Instant Styling) -->
+<script src="https://cdn.tailwindcss.com"></script>
+
+<!-- FontAwesome Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] },
+        colors: { brand: { 500: '#6366f1', 600: '#4f46e5', 700: '#4338ca' } }
+      }
+    }
+  }
+</script>
+
+<div class="app-shell">
+  <header class="topbar" *ngIf="showNavigation">
+    <div class="brand-block">
+      <div class="brand-mark">E</div>
+      <div class="brand-copy">
+        <span class="eyebrow">Insurance platform</span>
+        <h1>Eazy Claims</h1>
+      </div>
+    </div>
+
+    <nav class="main-nav" aria-label="Main navigation">
+      <a routerLink="/claim" routerLinkActive="active">Overview</a>
+      <a routerLink="/log-claim" routerLinkActive="active">Log claim</a>
+      <a routerLink="/view-claims" routerLinkActive="active">Claims</a>
+      <button type="button" class="logout-btn" (click)="logout()">
+        <i class="bi bi-box-arrow-right"></i>
+        Log out
+      </button>
+    </nav>
+  </header>
+
+  <main class="page-shell">
+    <router-outlet></router-outlet>
+  </main>
 </div>

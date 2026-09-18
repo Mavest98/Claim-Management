@@ -1,57 +1,108 @@
-<div class="container py-4">
-  <!-- Header -->
-  <div class="d-flex align-items-center justify-content-between mb-4">
-    <h1 class="mb-0 text-gradient">
-      <i class="bi bi-shield-check me-2"></i>Eazy Claims
-    </h1>
-  </div>
-
-  <!-- Coverages -->
-  <h5 class="mb-3 text-gradient">
-    <i class="bi bi-question-circle me-2"></i> Insurance Claims FAQs
-  </h5>
-
-  <div class="row g-3">
-    <div class="col-6" *ngFor="let faq of faqs; let i = index">
-      <div
-        class="card text-center p-3 text-decoration-none faq-card shadow"
-        (click)="toggleFaq(i)"
-        style="cursor: pointer; color: inherit; background: linear-gradient(135deg, #3c98bd 0%, #348abb 100%);"
-      >
-        <div class="faq-icon mb-2">
-          <i class="bi bi-info-circle-fill text-white" style="font-size: 2rem;"></i>
-        </div>
-        <h6 class="mb-2 text-white">{{ faq.title }}</h6>
-        <small class="text-white-50">{{ faq.description }}</small>
+<div class="dashboard-shell">
+  <ng-container *ngIf="currentView === 'overview'">
+    <section class="top-panel">
+      <div class="welcome-block">
+        <span class="eyebrow">Claims overview</span>
+        <h1>Keep your policy protected.</h1>
+        <p>Monitor submissions, approvals, and compliance in one secure dashboard.</p>
       </div>
 
-      <!-- FAQ Details Section (Expanded when clicked) -->
-      <div *ngIf="selectedFaq === faq.title" class="faq-details p-4 bg-white rounded-lg shadow-sm mt-2">
-        <h6 class="text-gray-800 font-semibold">
-          <i class="bi bi-info-circle me-2 text-primary"></i>{{ faq.title }}
-        </h6>
-        <ul class="mt-3 list-disc pl-5 text-gray-600">
-          <li *ngFor="let detail of faq.details">{{ detail }}</li>
+      <div class="security-summary">
+        <div class="status-row"><span class="status-dot"></span> Fraud screening active</div>
+        <div class="security-metrics">
+          <div><strong>98.7%</strong><span>Safe review score</span></div>
+          <div><strong>24/7</strong><span>Monitoring</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="stats-grid">
+      <article class="stat-card primary"><div class="stat-icon"><i class="bi bi-clipboard2-check"></i></div><div><span>Claims processed</span><strong>1,248</strong></div></article>
+      <article class="stat-card cyan"><div class="stat-icon"><i class="bi bi-hourglass-split"></i></div><div><span>Pending review</span><strong>{{ submittedClaims.length }}</strong></div></article>
+      <article class="stat-card green"><div class="stat-icon"><i class="bi bi-check2-circle"></i></div><div><span>Approval rate</span><strong>96.4%</strong></div></article>
+      <article class="stat-card violet"><div class="stat-icon"><i class="bi bi-shield-check"></i></div><div><span>Risk shield</span><strong>Low</strong></div></article>
+    </section>
+
+    <section class="utility-grid">
+      <div class="action-card">
+        <div class="card-header"><h3>Quick actions</h3><span class="badge success">Live</span></div>
+        <div class="button-stack">
+          <button class="panel-btn primary" (click)="onViewClaims()"><i class="bi bi-eye"></i> View claims</button>
+          <button class="panel-btn secondary" (click)="onLogClaims()"><i class="bi bi-pencil-square"></i> Log new claim</button>
+        </div>
+      </div>
+
+      <div class="action-card highlighted">
+        <div class="card-header"><h3>Security pulse</h3><span class="badge neutral">Protected</span></div>
+        <div class="progress-wrap"><div class="progress-label"><span>Identity assurance</span><strong>96%</strong></div><div class="progress-bar"><span></span></div></div>
+        <ul class="mini-list">
+          <li><i class="bi bi-check-circle-fill"></i> Biometric verification</li>
+          <li><i class="bi bi-check-circle-fill"></i> Fraud detection active</li>
+          <li><i class="bi bi-check-circle-fill"></i> Encrypted communication</li>
         </ul>
       </div>
-    </div>
-  </div>
+    </section>
 
-  <!-- Actions -->
-  <div class="mt-5">
-    <div class="d-flex justify-content-between">
-      <button
-        class="btn btn-gradient-primary flex-fill me-2 action-btn shadow"
-        (click)="onViewClaims()"
-      >
-        <i class="bi bi-eye me-2"></i> View Claims
-      </button>
-      <button
-        class="btn btn-gradient-success flex-fill action-btn shadow"
-        (click)="onLogClaims()"
-      >
-        <i class="bi bi-pencil-square me-2"></i> Log Claims
+    <section class="faq-panel">
+      <div class="faq-title-row"><h2><i class="bi bi-question-circle"></i> Insurance claims FAQs</h2></div>
+      <div class="faq-grid">
+        <div class="faq-item" *ngFor="let faq of faqs; let i = index">
+          <div class="faq-card" (click)="toggleFaq(i)">
+            <div class="faq-icon"><i class="bi bi-info-circle-fill"></i></div>
+            <div class="faq-copy"><h4>{{ faq.title }}</h4><small>{{ faq.description }}</small></div>
+          </div>
+          <div *ngIf="selectedFaq === faq.title" class="faq-details">
+            <h5>{{ faq.title }}</h5>
+            <ul><li *ngFor="let detail of faq.details">{{ detail }}</li></ul>
+          </div>
+        </div>
+      </div>
+    </section>
+  </ng-container>
+
+  <section *ngIf="currentView === 'verify'" class="auth-wrapper">
+    <div class="action-card auth-box">
+      <div class="auth-badge"><i class="bi" [ngClass]="isScanning ? 'bi-arrow-repeat spin' : 'bi-shield-lock-fill'"></i></div>
+      <h2>Identity Verification</h2>
+      <p>Confirm your biometrics to initiate an official claim entry.</p>
+      <div class="user-info-pill">
+        <div><span>Policy Holder:</span> <strong>{{ verifiedUser.fullName }}</strong></div>
+        <div><span>National ID:</span> <strong>{{ verifiedUser.idNumber }}</strong></div>
+      </div>
+      <button class="panel-btn primary" (click)="verifyIdentity()" [disabled]="isScanning">
+        <i class="bi bi-person-bounding-box"></i>{{ isScanning ? 'Verifying Identity...' : 'Authenticate Identity Now' }}
       </button>
     </div>
-  </div>
+  </section>
+
+  <section *ngIf="currentView === 'form'" class="form-wrapper">
+    <div class="action-card">
+      <div class="card-header"><div><h3>Incident Intake Form</h3><small class="verified-tag"><i class="bi bi-check-circle-fill"></i> Identity Verified: {{ verifiedUser.fullName }}</small></div></div>
+      <form (ngSubmit)="submitClaim()" class="intake-form">
+        <div class="form-row">
+          <div class="form-group"><label>Policy Number *</label><input type="text" [(ngModel)]="claimInput.policyNumber" name="policyNumber" placeholder="POL-883921" required /></div>
+          <div class="form-group"><label>Incident Type</label><select [(ngModel)]="claimInput.incidentType" name="incidentType"><option value="Vehicle">Vehicle Damage</option><option value="Medical">Medical Emergency</option><option value="Property">Property / Home</option><option value="Travel">Travel Interruption</option></select></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Estimated Amount ($ USD) *</label><input type="number" [(ngModel)]="claimInput.claimAmount" name="claimAmount" placeholder="2500" required /></div>
+          <div class="form-group"><label>Requested Resolution</label><select [(ngModel)]="claimInput.resolution" name="resolution"><option value="Reimbursement">Direct Reimbursement</option><option value="Repair">Authorized Repair Service</option><option value="Replacement">Full Replacement</option></select></div>
+        </div>
+        <div class="form-group"><label>Incident Details *</label><textarea rows="4" [(ngModel)]="claimInput.claimDescription" name="claimDescription" placeholder="Provide event timeline, location, and circumstances..." required></textarea></div>
+        <button type="submit" class="panel-btn primary"><i class="bi bi-send-fill"></i> Submit Claim</button>
+      </form>
+    </div>
+  </section>
+
+  <section *ngIf="currentView === 'claims'" class="claims-list-wrapper">
+    <div class="claims-header"><div><h2>Registered Claims</h2><p>Live registry of active and reviewed submissions.</p></div><button class="panel-btn secondary compact" (click)="onLogClaims()"><i class="bi bi-plus-lg"></i> Log New Claim</button></div>
+    <div class="claims-grid">
+      <div class="claim-card-item" *ngFor="let claim of submittedClaims">
+        <div class="claim-item-top"><div class="claim-id-pill">{{ claim.id }}</div><div class="claim-status-pill">{{ claim.status }}</div></div>
+        <div class="claim-item-details">
+          <div><span>Policy Reference:</span> <strong>{{ claim.policyNumber }}</strong></div><div><span>Type:</span> <strong>{{ claim.incidentType }}</strong></div><div><span>Claim Amount:</span> <strong class="green-text">${{ claim.claimAmount }} USD</strong></div><div><span>Resolution:</span> <strong>{{ claim.resolution }}</strong></div><div><span>Submitted By:</span> <strong>{{ claim.verifiedUser }}</strong></div><div><span>Date:</span> <strong>{{ claim.dateSubmitted }}</strong></div>
+        </div>
+        <div class="claim-item-desc"><span>Incident Notes:</span><p>{{ claim.claimDescription }}</p></div>
+      </div>
+    </div>
+  </section>
 </div>
